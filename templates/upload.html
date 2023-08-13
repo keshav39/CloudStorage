@@ -1,0 +1,13 @@
+<!-- custom_auth/templates/upload.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Upload a File</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Upload</button>
+    </form>
+</div>
+{% endblock %}
