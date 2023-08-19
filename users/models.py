@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
+from views import content_file_name
 
 
 class CustomUserManager(BaseUserManager):
@@ -45,7 +46,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
 class UploadedFile(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    file = models.FileField(upload_to='uploads/')
+    file = models.FileField(upload_to=content_file_name)
     file_name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
 

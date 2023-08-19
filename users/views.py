@@ -1,3 +1,4 @@
+import os
 from .forms import FileUploadForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
@@ -8,6 +9,12 @@ from .forms import *
 
 def landing(request):
     return render(request, 'home.html')
+
+
+def content_file_name(instance, file):
+    ext = file.file.split('.')[-1]
+    filename = "%s_%s.%s" % (instance.user.id, instance.file.id, ext)
+    return ('uploads' / filename)
 
 
 def upload_file(request):
@@ -24,6 +31,14 @@ def upload_file(request):
     else:
         form = FileUploadForm()
     return render(request, 'upload.html', {'form': form})
+
+
+def delete_file(self, request, file_id):
+    user = request.session['user']
+    delete_file = self.model.objects.get(id=file_id)
+    delete_file.delete()
+    messages.success(request, 'Your post has been deleted successfully.')
+    return redirect('profile')
 
 
 def signup(request):
