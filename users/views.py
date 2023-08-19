@@ -11,10 +11,10 @@ def landing(request):
     return render(request, 'home.html')
 
 
-def content_file_name(instance, file):
-    ext = file.file.split('.')[-1]
-    filename = "%s_%s.%s" % (instance.user.id, instance.file.id, ext)
-    return ('uploads' / filename)
+# def content_file_name(instance, file):
+#     ext = file.file.split('.')[-1]
+#     filename = "%s_%s.%s" % (instance.user.id, instance.file.id, ext)
+#     return ('uploads' / filename)
 
 
 def upload_file(request):

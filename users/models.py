@@ -46,7 +46,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
 class UploadedFile(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    file = models.FileField(upload_to=content_file_name)
+    # file = models.FileField(upload_to=content_file_name)
+    file = models.FileField(upload_to='uploads/')
     file_name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
 
