@@ -9,8 +9,6 @@ def rename_file(instance, filename):
     ext = filename.split('.')[-1]
     instance.user.file_counter += 1
     instance.user.save()
-
-    # Construct a new filename using a unique identifier and the original extension
     new_filename = f"{instance.user.username}_{instance.user.file_counter}.{ext}"
 
     return os.path.join('uploads', new_filename)
