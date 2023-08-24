@@ -1,20 +1,13 @@
 import os
-from .forms import FileUploadForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import *
 
 
 def landing(request):
     return render(request, 'home.html')
-
-
-# def content_file_name(instance, file):
-#     ext = file.file.split('.')[-1]
-#     filename = "%s_%s.%s" % (instance.user.id, instance.file.id, ext)
-#     return ('uploads' / filename)
 
 
 def upload_file(request):
@@ -30,15 +23,28 @@ def upload_file(request):
             return redirect('profile')
     else:
         form = FileUploadForm()
-    return render(request, 'upload.html', {'form': form})
+
+    context = {
+        'form': form,
+    }
+    return render(request, 'upload.html', context)
 
 
-def delete_file(self, request, file_id):
-    user = request.session['user']
-    delete_file = self.model.objects.get(id=file_id)
-    delete_file.delete()
-    messages.success(request, 'Your post has been deleted successfully.')
-    return redirect('profile')
+def delete_file(request, file_id):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    file_to_delete = get_object_or_404(
+        UploadedFile, id=file_id, user=request.user)
+    if request.method == 'POST':
+        file_to_delete.file.delete()
+        file_to_delete.delete()
+
+        return redirect('profile')
+
+    context = {
+        'file_to_delete': file_to_delete,
+    }
+    return render(request, 'delete.html', context)
 
 
 def signup(request):

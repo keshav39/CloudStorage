@@ -1,7 +1,19 @@
-from django.contrib.auth.models import User
+import os
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
-from views import content_file_name
+from django.conf import settings
+
+
+def rename_file(instance, filename):
+    # Get the file's extension
+    ext = filename.split('.')[-1]
+    instance.user.file_counter += 1
+    instance.user.save()
+
+    # Construct a new filename using a unique identifier and the original extension
+    new_filename = f"{instance.user.username}_{instance.user.file_counter}.{ext}"
+
+    return os.path.join('uploads', new_filename)
 
 
 class CustomUserManager(BaseUserManager):
@@ -34,7 +46,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     phone_number = models.CharField(max_length=15, unique=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
-
+    file_counter = models.PositiveIntegerField(default=0)
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'
@@ -46,10 +58,12 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
 class UploadedFile(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    # file = models.FileField(upload_to=content_file_name)
-    file = models.FileField(upload_to='uploads/')
+    file = models.FileField(upload_to=rename_file)
     file_name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
+
+    shared_with = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, related_name='shared_files', blank=True)
 
     def __str__(self):
         return self.file_name
