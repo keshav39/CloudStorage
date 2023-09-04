@@ -1,0 +1,18 @@
+<!-- custom_auth/templates/share_files.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mx-auto mt-0 bg-body">
+    <div class="bg-white rounded-lg shadow-md p-8 max-w-md mx-auto">
+        <h2 class="text-2xl font-semibold mb-4">Share Files</h2>
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit"
+                class="bg-button hover:bg-button_hover text-white font-semibold py-2 px-4 rounded-full">
+                Share
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

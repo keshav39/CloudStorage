@@ -66,9 +66,11 @@ def profile(request):
     if (request.user.is_authenticated):
         user = request.user
         uploaded_files = UploadedFile.objects.filter(user=user)
+        shared_files = UploadedFile.objects.filter(shared_with=user)
         context = {
             'user': user,
             'uploaded_files': uploaded_files,
+            'shared_files': shared_files,
         }
         return render(request, 'profile.html', context)
     return redirect('login')
@@ -102,3 +104,39 @@ def logout_view(request):
         logout(request)
         return redirect('home')
     return redirect('login')
+
+
+def share(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    user = request.user
+    uploaded_files = UploadedFile.objects.filter(user=user)
+
+    if request.method == 'POST':
+        form = ShareFilesForm(user, request.POST)
+        if form.is_valid():
+            selected_files = form.cleaned_data.get('selected_files')
+            recipients = form.cleaned_data.get('recipients')
+
+            # Validate selected_files to ensure they belong to the user
+            valid_selected_files = UploadedFile.objects.filter(
+                id__in=selected_files, user=user)
+
+            if len(valid_selected_files) != len(selected_files):
+                # Some selected files don't belong to the user, handle the error
+                return render(request, 'share.html', {'form': form, 'error_message': 'Invalid file selection.'})
+
+            for file_to_share in valid_selected_files:
+                # Share the file with selected recipients
+                file_to_share.shared_with.add(*recipients)
+
+            return redirect('profile')
+    else:
+        form = ShareFilesForm(user=user)
+
+    context = {
+        'form': form,
+        'uploaded_files': uploaded_files,
+    }
+    return render(request, 'share.html', context)
