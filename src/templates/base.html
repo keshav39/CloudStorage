@@ -9,6 +9,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Project</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
     <link rel="stylesheet" href="{% static 'output.css' %}">
 </head>
 
@@ -16,21 +17,23 @@
 
     <nav class="flex flex-wrap bg-common_bg align-middle justify-between py-2.5 px-5 text-white">
         <div class="flex align-middle ml-5">
-            <img class="rounded-lg border-border border-solid border-2 h-full mr-2.5 object-cover"
-                src="{% static 'logo.jpg' %}" alt="Project Logo">
+            <a href="{% url 'home' %}">
+                <img class="rounded-lg border-border border-solid border-2 h-full mr-2.5 object-cover"
+                    src="{% static 'logo.jpg' %}" alt="Project Logo">
+            </a>
             <span class="ml-5 text-2xl pt-2 font-bold">Storage & Share</span>
         </div>
         <ul class="flex flex-wrap text-lg list-none">
-            <li class="mr-5"><a class="text-white inline-block" href="{% url 'home' %}"><button
-                        class="bg-button rounded-xl border-none text-white cursor-pointer py-2.5 px-5 transition ease-in delay-5 hover:bg-button_hover">Home</button></a>
-            </li>
             {% if user.is_authenticated %}
-            <li class="mr-5"><a class="text-white inline-block" href="{% url 'upload' %}"><button
-                        class="bg-button rounded-xl border-none text-white cursor-pointer py-2.5 px-5 transition ease-in delay-5 hover:bg-button_hover">Upload
-                        </button< /a>
+            <li class="mr-5">
+                <p class="text-white font-semibold pt-2.5">Welcome, {{ user.username }}!</p>
             </li>
             <li class="mr-5"><a class="text-white inline-block" href="{% url 'profile' %}"><button
                         class="bg-button rounded-xl border-none text-white cursor-pointer py-2.5 px-5 transition ease-in delay-5 hover:bg-button_hover">Profile</button></a>
+            </li>
+            <li class="mr-5"><a class="text-white inline-block" href="{% url 'upload' %}"><button
+                        class="bg-button rounded-xl border-none text-white cursor-pointer py-2.5 px-5 transition ease-in delay-5 hover:bg-button_hover">Upload
+                        </button< /a>
             </li>
             <li class="mr-5"><a class="text-white inline-block" href="{% url 'logout' %}"><button
                         class="bg-button rounded-xl border-none text-white cursor-pointer py-2.5 px-5 transition ease-in delay-5 hover:bg-button_hover">Logout</button></a>
@@ -49,17 +52,22 @@
 
 
     <div class="flex h-screen">
-        <nav class="bg-common_bg h-full pt-14 w-60 top-20 flex-auto" id="sidebar">
+        <aside class="bg-common_bg h-full pt-14 w-60 top-20 flex-initial" id="sidebar">
             <ul class="list-none">
                 <li class="p-5 text-center"><a class="text-white inline-block" href="{% url 'home' %}">Home</a></li>
-                <li class="p-5 text-center"><a class="text-white inline-block" href="{% url 'login' %}">Login</a></li>
-                <li class="p-5 text-center"><a class="text-white inline-block" href="{% url 'logout' %}">Logout</a></li>
+                {% if user.is_authenticated %}
                 <li class="p-5 text-center"><a class="text-white inline-block" href="{% url 'profile' %}">Profile</a>
+                <li class="p-5 text-center"><a class="text-white inline-block" href="{% url 'share' %}">Share</a></li>
+                <li class="p-5 text-center"><a class="text-white inline-block" href="{% url 'logout' %}">Logout</a></li>
+                {% else %}
+                <li class="p-5 text-center"><a class="text-white inline-block" href="{% url 'signup' %}">Signup</a></li>
+                <li class="p-5 text-center"><a class="text-white inline-block" href="{% url 'login' %}">Login</a></li>
+                {% endif %}
                 </li>
             </ul>
-        </nav>
+        </aside>
 
-        <div class="align-middle items-center text-center w-full h-full flex-auto">
+        <div class="flex-1 mt-0">
             {% block content %}
             {% endblock %}
         </div>

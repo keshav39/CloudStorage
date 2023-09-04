@@ -2,16 +2,25 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container">
-    <div class="header">
-        <h2>Login</h2>
+<div class="container mx-auto mt-0 shadow-none bg-body">
+    <div class="bg-white rounded-lg shadow-md p-8 max-w-md mx-auto border-black">
+        <h2 class="text-2xl font-semibold mb-4">Login</h2>
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+            <div class="space-y-2">
+                {{ form.username.label_tag }}
+                {{ form.username }}
+            </div>
+            <div class="space-y-2">
+                {{ form.password.label_tag }}
+                {{ form.password }}
+            </div>
+            <button type="submit"
+                class="bg-button hover:bg-button_hover text-white font-semibold py-2 px-4 rounded-full">
+                Login
+            </button>
+        </form>
+        <p class="mt-4">Don't have an account? <a href="{% url 'signup' %}" class="text-blue_500">Sign up</a></p>
     </div>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.username.label_tag }} {{ form.username }}
-        {{ form.password.label_tag }} {{ form.password }}
-        <button type="submit">Login</button>
-    </form>
-    <p>Don't have an account? <a href="{% url 'signup' %}">Sign up</a></p>
 </div>
 {% endblock %}

@@ -3,31 +3,47 @@
 
 {% block content %}
 {% if user.is_authenticated %}
-<div class="header">
-    <h1>User Profile</h1>
-    <div class="button-para">
-        <p>Welcome, {{ user.username }} !</p>
+<div class="container mx-auto mt-10">
+    <div class="bg-white rounded-lg shadow-md p-8">
+        <h1 class="text-2xl font-semibold mb-4">User Profile</h1>
+        <p class="text-grey_600">Welcome, {{ user.username }}!</p>
     </div>
 </div>
 {% endif %}
-<div class="profile-container">
-    <h2>Profile</h2>
-    <p>Email: {{ user.email }}</p>
-    <p>Username: {{ user.username }}</p>
-    <p>Phone Number: {{ user.phone_number }}</p>
-    <h3>Uploaded Files</h3>
-    <hr>
+<div class="container mx-auto mt-10">
+    <h2 class="text-2xl font-semibold mb-4">Profile</h2>
+    <p class="mb-2">Email: {{ user.email }}</p>
+    <p class="mb-2">Username: {{ user.username }}</p>
+    <p class="mb-2">Phone Number: {{ user.phone_number }}</p>
+    <h3 class="text-2xl font-semibold mt-6 mb-2">Uploaded Files</h3>
+    <hr class="mb-4">
+    <p><a href="{% url 'share' %}" class="text-blue_500 hover:underline">Share Files</a></p>
     <ul>
         {% for file in uploaded_files %}
-        <li>
-            <span class="bold">File Name: </span>{{ file.file_name }}<br><br>
-            <span class="bold">Description: </span>{{ file.description }}<br><br>
-            <a href="{{ file.file.url }}" target="_blank" class="btn btn-outline-warning">View</a>
-            <a href="{{ file.file.url }}" download>Download</a>
-            <a href="{% url 'delete' file.id %}" class="btn btn-outline-danger" style="float:right;">Delete</a>
+        <li class="mb-4">
+            <span class="font-semibold">File Name: </span>{{ file.file_name }}<br>
+            <span class="font-semibold">Description: </span>{{ file.description }}<br>
+            <a href="{{ file.file.url }}" target="_blank" class="text-blue_500 hover:underline">View</a>
+            <a href="{{ file.file.url }}" download class="text-blue_500 hover:underline ml-4">Download</a>
+            <a href="{% url 'delete' file.id %}" class="text-red_500 hover:underline ml-4">Delete</a>
         </li>
         {% empty %}
         <p>No uploaded files.</p>
+        {% endfor %}
+    </ul>
+
+    <h3 class="text-2xl font-semibold mt-6 mb-2">Shared Files</h3>
+    <hr class="mb-4">
+    <ul>
+        {% for file in shared_files %}
+        <li class="mb-4">
+            <span class="font-semibold">File Name: </span>{{ file.file_name }}<br><br>
+            <span class="font-semibold">Description: </span>{{ file.description }}<br><br>
+            <a href="{{ file.file.url }}" target="_blank" class="text-blue_500 hover:underline">View</a>
+            <a href="{{ file.file.url }}" class="text-blue_500 hover:underline ml-4" download>Download</a>
+        </li>
+        {% empty %}
+        <p>No shared files.</p>
         {% endfor %}
     </ul>
 </div>
