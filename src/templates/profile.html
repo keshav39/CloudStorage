@@ -3,19 +3,13 @@
 
 {% block content %}
 {% if user.is_authenticated %}
-<div class="container mx-auto mt-10">
-    <div class="bg-white rounded-lg shadow-md p-8">
-        <h1 class="text-2xl font-semibold mb-4">User Profile</h1>
-        <p class="text-grey_600">Welcome, {{ user.username }}!</p>
-    </div>
-</div>
 {% endif %}
-<div class="container mx-auto mt-10">
-    <h2 class="text-2xl font-semibold mb-4">Profile</h2>
-    <p class="mb-2">Email: {{ user.email }}</p>
-    <p class="mb-2">Username: {{ user.username }}</p>
-    <p class="mb-2">Phone Number: {{ user.phone_number }}</p>
-    <h3 class="text-2xl font-semibold mt-6 mb-2">Uploaded Files</h3>
+<div class="container mx-auto mt-10 shadow-none">
+    <h2 class="text-4xl font-semibold mb-4">Profile</h2>
+    <p class="mb-2"><span class="font-semibold">Email:</span> {{ user.email }}</p>
+    <p class="mb-2"><span class="font-semibold">Username:</span> {{ user.username }}</p>
+    <p class="mb-2"><span class="font-semibold">Phone Number:</span> {{ user.phone_number }}</p>
+    <h2 class="text-2xl font-semibold mt-6 mb-2">Uploaded Files</h2>
     <hr class="mb-4">
     <p><a href="{% url 'share' %}" class="text-blue_500 hover:underline">Share Files</a></p>
     <ul>
@@ -32,7 +26,7 @@
         {% endfor %}
     </ul>
 
-    <h3 class="text-2xl font-semibold mt-6 mb-2">Shared Files</h3>
+    <h2 class="text-2xl font-semibold mt-6 mb-2">Shared Files</h2>
     <hr class="mb-4">
     <ul>
         {% for file in shared_files %}

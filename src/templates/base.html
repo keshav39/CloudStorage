@@ -57,7 +57,12 @@
                 <li class="p-5 text-center"><a class="text-white inline-block" href="{% url 'home' %}">Home</a></li>
                 {% if user.is_authenticated %}
                 <li class="p-5 text-center"><a class="text-white inline-block" href="{% url 'profile' %}">Profile</a>
+                </li>
                 <li class="p-5 text-center"><a class="text-white inline-block" href="{% url 'share' %}">Share</a></li>
+                {% if user.is_staff %}
+                <li class="p-5 text-center"><a class="text-white inline-block" href="{% url 'manage_files' %}">Admin</a>
+                </li>
+                {% endif %}
                 <li class="p-5 text-center"><a class="text-white inline-block" href="{% url 'logout' %}">Logout</a></li>
                 {% else %}
                 <li class="p-5 text-center"><a class="text-white inline-block" href="{% url 'signup' %}">Signup</a></li>
@@ -67,7 +72,7 @@
             </ul>
         </aside>
 
-        <div class="flex-1 mt-0">
+        <div class="flex-auto h-full p-8 mt-0">
             {% block content %}
             {% endblock %}
         </div>
