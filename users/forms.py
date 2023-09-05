@@ -4,10 +4,13 @@ from django.contrib.auth.forms import UserCreationForm
 
 
 class CustomUserCreationForm(UserCreationForm):
+    master_key = forms.CharField(max_length=100, required=False, widget=forms.TextInput(
+        attrs={'Master Key': 'MasterAdminPass'}))
+
     class Meta:
         model = CustomUser
         fields = ('email', 'username', 'phone_number',
-                  'password1', 'password2')
+                  'password1', 'password2', 'master_key')
 
 
 class FileUploadForm(forms.ModelForm):

@@ -1,9 +1,9 @@
-import os
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import *
+from .models import CustomUser
 
 
 def landing(request):
@@ -54,9 +54,12 @@ def signup(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            login(request, user)
-            return redirect('home')
+            user = form.save(commit=False)
+            master_key = form.cleaned_data.get('master_key')
+            if master_key == 'MasterAdminPass':
+                user.is_staff = True
+            user.save()
+            return redirect('login')
     else:
         form = CustomUserCreationForm()
     return render(request, 'signup.html', {'form': form})
@@ -140,3 +143,29 @@ def share(request):
         'uploaded_files': uploaded_files,
     }
     return render(request, 'share.html', context)
+
+
+def manage_files(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    if not request.user.is_staff:
+        # Redirect to a page with an access denied message for non-admin users
+        return render(request, 'denied.html')
+
+    if request.method == 'POST':
+        file_id = request.POST.get('file_id')
+        file_to_delete = get_object_or_404(UploadedFile, id=file_id)
+        file_to_delete.file.delete()
+        file_to_delete.delete()
+
+    # Get all uploaded files
+    users = CustomUser.objects.all()
+    uploaded_files = UploadedFile.objects.all()
+
+    context = {
+        'users': users,
+        'uploaded_files': uploaded_files,
+    }
+
+    return render(request, 'admin.html', context)
