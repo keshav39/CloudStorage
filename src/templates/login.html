@@ -2,9 +2,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container mx-auto mt-0 shadow-none bg-body">
-    <div class="bg-white rounded-lg shadow-md p-8 max-w-md mx-auto border-black">
-        <h2 class="text-4xl font-semibold mb-4">Login</h2>
+<div class="container mx-auto mt-10 bg-body shadow-none">
+    <div class="bg-white rounded-lg shadow-md p-8 max-w-md mx-auto">
+        <h2 class="text-4xl font-semibold mb-4 text-center">Login</h2>
         <form method="post" class="space-y-4">
             {% csrf_token %}
             <div class="space-y-2">

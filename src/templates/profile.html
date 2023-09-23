@@ -1,11 +1,8 @@
-<!-- custom_auth/templates/profile.html -->
 {% extends 'base.html' %}
 
 {% block content %}
-{% if user.is_authenticated %}
-{% endif %}
 <div class="container mx-auto mt-10 shadow-none">
-    <h2 class="text-4xl font-semibold mb-4">Profile</h2>
+    <h2 class="text-4xl font-semibold mb-4 text-center">Profile</h2>
     <p class="mb-2"><span class="font-semibold">Email:</span> {{ user.email }}</p>
     <p class="mb-2"><span class="font-semibold">Username:</span> {{ user.username }}</p>
     <p class="mb-2"><span class="font-semibold">Phone Number:</span> {{ user.phone_number }}</p>
@@ -40,5 +37,6 @@
         <p>No shared files.</p>
         {% endfor %}
     </ul>
+    <a href="{% url 'confirm_delete' %}" class="text-red_500 hover:underline ml-4">Delete Profile</a>
 </div>
 {% endblock %}

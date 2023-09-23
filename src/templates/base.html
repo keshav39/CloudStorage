@@ -49,10 +49,9 @@
         </ul>
     </nav>
 
-
-
     <div class="flex h-screen">
-        <aside class="bg-common_bg h-full pt-14 w-60 top-20 flex-initial" id="sidebar">
+        <aside class="bg-common_bg h-full pt-14 w-1/4 md:w-1/5 lg:w-1/6 xl:w-1/7 2xl:w-1/8 top-20 flex-initial"
+            id="sidebar">
             <ul class="list-none">
                 <li class="p-5 text-center"><a class="text-white inline-block" href="{% url 'home' %}">Home</a></li>
                 {% if user.is_authenticated %}
@@ -60,10 +59,9 @@
                 </li>
                 <li class="p-5 text-center"><a class="text-white inline-block" href="{% url 'share' %}">Share</a></li>
                 {% if user.is_staff %}
-                <li class="p-5 text-center"><a class="text-white inline-block" href="{% url 'manage_files' %}">Admin</a>
+                <li class="p-5 text-center"><a class="text-white inline-block" href="{% url 'manage' %}">Admin</a>
                 </li>
                 {% endif %}
-                <li class="p-5 text-center"><a class="text-white inline-block" href="{% url 'logout' %}">Logout</a></li>
                 {% else %}
                 <li class="p-5 text-center"><a class="text-white inline-block" href="{% url 'signup' %}">Signup</a></li>
                 <li class="p-5 text-center"><a class="text-white inline-block" href="{% url 'login' %}">Login</a></li>
