@@ -15,10 +15,12 @@ module.exports = {
       blue_500: "#3b82f6",
       blue_600: "#2563eb",
       purple_400: "#c084fc",
-      grey_600: "#4b5563",
+      gray_200: "#e5e7eb",
+      gray_300: "#d1d5db",
       red_500: "#ef4444",
       red_600: "#dc2626",
-
+      green_500: "#22c55e",
+      green_600: "#16a34a",
     },
     extend: {
       height: {},
