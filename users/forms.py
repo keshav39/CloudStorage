@@ -1,11 +1,12 @@
 from .models import *
 from django import forms
+from decouple import config
 from django.contrib.auth.forms import UserCreationForm
 
 
 class CustomUserCreationForm(UserCreationForm):
-    master_key = forms.CharField(max_length=100, required=False, widget=forms.TextInput(
-        attrs={'Master Key': 'MasterAdminPass'}))
+    master_key = forms.CharField(max_length=100, required=False, widget=forms.PasswordInput(
+        attrs={'master_key': config('KEY')}))
 
     class Meta:
         model = CustomUser
