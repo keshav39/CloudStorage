@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import *
+from decouple import config
 from .models import CustomUser
 
 
@@ -39,12 +40,10 @@ def delete_file(request, file_id):
         file_to_delete.file.delete()
         file_to_delete.delete()
 
-        return redirect('profile')
-
     context = {
         'file_to_delete': file_to_delete,
     }
-    return render(request, 'delete.html', context)
+    return render(request, 'delete_file.html', context)
 
 
 def signup(request):
@@ -56,7 +55,7 @@ def signup(request):
         if form.is_valid():
             user = form.save(commit=False)
             master_key = form.cleaned_data.get('master_key')
-            if master_key == 'MasterAdminPass':
+            if master_key == config('KEY'):
                 user.is_staff = True
             user.save()
             return redirect('login')
@@ -168,4 +167,83 @@ def manage_files(request):
         'uploaded_files': uploaded_files,
     }
 
-    return render(request, 'admin.html', context)
+    return render(request, 'file_admin.html', context)
+
+
+def manage_users(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    if not request.user.is_staff:
+        # Redirect to an access denied page for non-admin users
+        return render(request, 'denied.html')
+
+    # Get all users
+    users = CustomUser.objects.all()
+
+    context = {
+        'users': users,
+    }
+
+    return render(request, 'user_admin.html', context)
+
+
+def manage(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    if not request.user.is_staff:
+        # Redirect to an access denied page for non-admin users
+        return render(request, 'denied.html')
+
+    return render(request, 'manage.html')
+
+
+def delete_user(request, user_id):
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    if not request.user.is_staff:
+        # Redirect to an access denied page for non-admin users
+        return render(request, 'denied.html')
+
+    if request.method == 'POST':
+        # Delete the user with the specified user_id
+        user_to_delete = CustomUser.objects.get(pk=user_id)
+        user_to_delete.delete()
+
+    return redirect('manage_users')
+
+
+def promote_user(request, user_id):
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    if not request.user.is_staff:
+        # Redirect to an access denied page for non-admin users
+        return render(request, 'denied.html')
+
+    if request.method == 'POST':
+        # Promote the user with the specified user_id to admin
+        user_to_promote = CustomUser.objects.get(pk=user_id)
+        user_to_promote.is_staff = True
+        user_to_promote.save()
+    return redirect('manage_users')
+
+
+def confirm_delete(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    if request.method == 'POST':
+        # If the user confirms deletion, delete the user and related files
+        user = request.user
+        user.delete()
+        # Redirect to the logout view or any other appropriate view
+        return redirect('logout')
+
+    context = {
+        'users': request.user,
+    }
+
+    return render(request, 'confirm_delete.html', context)
