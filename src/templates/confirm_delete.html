@@ -1,0 +1,17 @@
+<!-- custom_auth/templates/delete_file.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mx-auto mt-10 bg-body shadow-none">
+    <div class="bg-white rounded-lg shadow-md p-8 max-w-md mx-auto">
+        <h2 class="text-4xl font-semibold mb-4 text-center">Delete Profile</h2>
+        <p class="mb-4">Are you sure you want to delete user : "{{ users.username }}"?</p>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="bg-red_500 hover:bg-red_600 text-white font-semibold py-2 px-4 rounded-full">
+                Delete
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}
