@@ -1,4 +1,5 @@
 from django.contrib.auth.forms import AuthenticationForm
+from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
@@ -247,3 +248,27 @@ def confirm_delete(request):
     }
 
     return render(request, 'confirm_delete.html', context)
+
+
+def file_search(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    if request.method == 'GET':
+        form = FileSearchForm(request.GET)
+        if form.is_valid():
+            query = form.cleaned_data['query']
+            # Search for files based on the query
+            results = UploadedFile.objects.filter(
+                (Q(file_name__icontains=query) | Q(
+                    description__icontains=query)) & Q(user=request.user)
+            )
+            context = {
+                'results': results,
+                'form': form,
+            }
+            return render(request, 'search.html', context)
+    else:
+        form = FileSearchForm()
+
+    return render(request, 'search.html', {'form': form})

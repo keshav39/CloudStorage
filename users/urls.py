@@ -18,4 +18,5 @@ urlpatterns = [
          views.delete_user, name='delete_user'),
     path('manage/promote-user/<int:user_id>/',
          views.promote_user, name='promote_user'),
+    path('search/', views.file_search, name='file_search'),
 ]
