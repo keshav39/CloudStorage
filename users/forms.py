@@ -17,6 +17,9 @@ class CustomUserCreationForm(UserCreationForm):
 class FileUploadForm(forms.ModelForm):
     class Meta:
         model = UploadedFile
+        widget = {
+            'description': forms.Textarea(attrs={"rows": 5, "cols": 20}),
+        }
         fields = ['file', 'file_name', 'description']
 
 
@@ -40,3 +43,8 @@ class ShareFilesForm(forms.Form):
         widget=forms.CheckboxSelectMultiple,
         required=True,  # This field is not required
     )
+
+
+class FileSearchForm(forms.Form):
+    query = forms.CharField(label='Search', max_length=100,
+                            widget=forms.TextInput(attrs={'class': 'w-full'}))
