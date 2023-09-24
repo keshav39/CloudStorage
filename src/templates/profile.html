@@ -37,6 +37,55 @@
         <p>No shared files.</p>
         {% endfor %}
     </ul>
-    <a href="{% url 'confirm_delete' %}" class="text-red_500 hover:underline ml-4">Delete Profile</a>
+    <a id="deleteProfileLink" href="javascript:void(0);" class="text-red_500 hover:underline ml-4">Delete Profile</a>
+
 </div>
+
+<!-- Add this modal dialog at the end of your 'profile.html' template -->
+<div id="confirmDeleteModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+    <div class="modal-overlay absolute w-full h-full bg-gray_900 opacity-50"></div>
+    <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
+        <!-- Add your modal content here -->
+        <div class="modal-content py-4 text-left px-6">
+            <div class="mb-4">
+                <p class="text-xl font-semibold">Confirm Deletion</p>
+                <p class="text-gray_700">Are you sure you want to delete your profile?</p>
+            </div>
+            <div class="text-right flex">
+                <button id="cancelDeleteButton"
+                    class="bg-gray_300 hover:bg-gray_400 text-gray_800 font-semibold py-2 px-4 rounded mx-2">Cancel</button>
+                <button id="confirmDeleteButton"
+                    class="bg-red_500 hover:bg-red_600 text-white font-semibold py-2 px-4 rounded mx-2">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add this script at the end of your 'profile.html' template -->
+<script>
+    // Get modal and buttons
+    const confirmDeleteModal = document.getElementById('confirmDeleteModal');
+    const confirmDeleteButton = document.getElementById('confirmDeleteButton');
+    const cancelDeleteButton = document.getElementById('cancelDeleteButton');
+
+    // Handle delete button click
+    confirmDeleteButton.addEventListener('click', function () {
+        // Redirect to the delete profile URL (replace with your actual URL)
+        window.location.href = "{% url 'confirm_delete' %}";
+    });
+
+    // Handle cancel button click
+    cancelDeleteButton.addEventListener('click', function () {
+        // Close the modal
+        confirmDeleteModal.classList.add('hidden');
+    });
+
+    // Trigger modal display when clicking the "Delete Profile" link
+    const deleteProfileLink = document.getElementById('deleteProfileLink');
+    deleteProfileLink.addEventListener('click', function () {
+        // Show the modal
+        confirmDeleteModal.classList.remove('hidden');
+    });
+</script>
+
 {% endblock %}
