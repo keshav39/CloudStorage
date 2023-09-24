@@ -58,7 +58,7 @@ class UploadedFile(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     file = models.FileField(upload_to=rename_file)
     file_name = models.CharField(max_length=255)
-    description = models.TextField(blank=True)
+    description = models.CharField(blank=True, max_length=255)
 
     shared_with = models.ManyToManyField(
         settings.AUTH_USER_MODEL, related_name='shared_files', blank=True)
