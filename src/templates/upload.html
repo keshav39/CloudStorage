@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mx-auto mt-10 shadow-none bg-body">
+    <div class="bg-white rounded-lg shadow-md p-8 max-w-md mx-auto">
+        <h2 class="text-4xl font-semibold mb-4 text-center">Upload a File</h2>
+        <form method="post" enctype="multipart/form-data" class="space-y-4">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit"
+                class="bg-button hover:bg-button_hover text-white font-semibold py-2 px-4 rounded-full">
+                Upload
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}
