@@ -7,7 +7,7 @@
 
         <!-- Display the search form -->
         <div class="mb-8">
-            <form method="get" class="flex flex-col items-center">
+            <form method="get" class="flex flex-col text-center">
                 {{ form }}
                 <button type="submit"
                     class="bg-button hover:bg-button_hover text-white font-semibold py-2 px-4 rounded-lg mt-2 sm:mt-0">
@@ -19,28 +19,63 @@
 
         <!-- Display search results in a table -->
         <div class="overflow-x-auto">
-            {% if results %}
-            <table class="w-full border-collapse border border-gray_300">
-                <thead class="bg-gray_200">
-                    <tr>
-                        <th class="px-4 py-2">File Name</th>
-                        <th class="px-4 py-2">Description</th>
-                        <th class="px-4 py-2">Preview</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for file in results %}
-                    <tr class="border-b border-gray_300 text-center">
-                        <td class="px-4 py-2">{{ file.file_name }}</td>
-                        <td class="px-4 py-2">{{ file.description }}</td>
-                        <td class="px-4 py-2">
-                            <a href="{{ file.file.url }}" target="_blank"
-                                class="text-blue_500 hover:underline">Preview</a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            {% if uploaded_files or shared_files %}
+            <div class="mb-4">
+                <h3 class="text-2xl font-semibold mb-4">Uploaded Files</h3>
+                {% if uploaded_files %}
+                <table class="w-full border-collapse border border-gray_300">
+                    <thead class="bg-gray_200">
+                        <tr>
+                            <th class="px-4 py-2">File Name</th>
+                            <th class="px-4 py-2">Description</th>
+                            <th class="px-4 py-2">Preview</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for file in uploaded_files %}
+                        <tr class="border-b border-gray_300 text-center">
+                            <td class="px-4 py-2">{{ file.file_name }}</td>
+                            <td class="px-4 py-2">{{ file.description }}</td>
+                            <td class="px-4 py-2">
+                                <a href="{{ file.file.url }}" target="_blank"
+                                    class="text-blue_500 hover:underline">Preview</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p class="text-lg">None</p>
+                {% endif %}
+            </div>
+            <div class="mb-4">
+                <h3 class="text-2xl font-semibold mb-4">Shared Files</h3>
+                {% if shared_files %}
+                <table class="w-full border-collapse border border-gray_300">
+                    <thead class="bg-gray_200">
+                        <tr>
+                            <th class="px-4 py-2">File Name</th>
+                            <th class="px-4 py-2">Description</th>
+                            <th class="px-4 py-2">Preview</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for file in shared_files %}
+                        <tr class="border-b border-gray_300 text-center">
+                            <td class="px-4 py-2">{{ file.file_name }}</td>
+                            <td class="px-4 py-2">{{ file.description }}</td>
+                            <td class="px-4 py-2">
+                                <a href="{{ file.file.url }}" target="_blank"
+                                    class="text-blue_500 hover:underline">Preview</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p class="text-lg">None</p>
+                {% endif %}
+            </div>
             {% else %}
             <p class="text-lg">No results found.</p>
             {% endif %}

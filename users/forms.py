@@ -46,5 +46,4 @@ class ShareFilesForm(forms.Form):
 
 
 class FileSearchForm(forms.Form):
-    query = forms.CharField(label='Search', max_length=100,
-                            widget=forms.TextInput(attrs={'class': 'w-full'}))
+    query = forms.CharField(label='Search', max_length=100)
