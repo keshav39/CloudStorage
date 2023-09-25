@@ -259,12 +259,17 @@ def file_search(request):
         if form.is_valid():
             query = form.cleaned_data['query']
             # Search for files based on the query
-            results = UploadedFile.objects.filter(
-                (Q(file_name__icontains=query) | Q(
-                    description__icontains=query)) & Q(user=request.user)
-            )
+            uploaded_files = UploadedFile.objects.filter(Q(file_name__icontains=query) | Q(
+                description__icontains=query), user=request.user)
+
+            # Search in shared files
+            shared_files = UploadedFile.objects.filter(Q(file_name__icontains=query) | Q(
+                description__icontains=query), shared_with=request.user)
+
             context = {
-                'results': results,
+                'uploaded_files': uploaded_files,
+                'shared_files': shared_files,
+                'query': query,
                 'form': form,
             }
             return render(request, 'search.html', context)
